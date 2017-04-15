@@ -8,6 +8,7 @@
 
 import UIKit
 import BDBOAuth1Manager
+import ChameleonFramework
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,10 +20,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NotificationCenter.default.addObserver(self, selector: "userDidLogout", name: NSNotification.Name(UserDidLogoutNotification), object: nil)
         
+        UINavigationBar.appearance().barTintColor = UIColor.flatMint
+        UINavigationBar.appearance().tintColor = UIColor.flatSand
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.flatWhite]
+        
         if User.currentUser != nil {
             // go to the logged in screen
-            let vc = storyboard.instantiateViewController(withIdentifier: "TweetsViewController")
+            let vc = storyboard.instantiateViewController(withIdentifier: "TweetsNavController")
+//            let vc = storyboard.instantiateViewController(withIdentifier: "TweetsViewController")
             window?.rootViewController = vc
+            print(User.currentUser!)
         }
         
         return true

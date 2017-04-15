@@ -50,12 +50,10 @@ class TwitterClient: BDBOAuth1SessionManager {
                                                           method: "POST",
                                                           requestToken: requestToken,
                                                           success: { (accessToken) in
-                                                            print("got access token")
                                                             TwitterClient.sharedInstance.requestSerializer.saveAccessToken(accessToken)
                                                             
                                                             TwitterClient.sharedInstance.get("1.1/account/verify_credentials.json", parameters: nil, progress: nil, success: {
                                                                 (operation: URLSessionDataTask, response: Any?) in
-                                                                print("user: \(response)")
                                                                 let user = User(dictionary: response as! Dictionary<String, Any>)
                                                                 User.currentUser = user
                                                                 self.loginCompletion?(user, nil)
@@ -65,10 +63,10 @@ class TwitterClient: BDBOAuth1SessionManager {
                                                             
                                                             TwitterClient.sharedInstance.get("1.1/statuses/home_timeline.json", parameters: nil, progress: nil, success: {
                                                                 (operation: URLSessionDataTask, response: Any?) in
-                                                                //                                                                print("user: \(response)")
                                                                 var tweets = Tweet.tweetsWithArray(array: response as! [[String: Any]])
                                                                 for tweet in tweets {
                                                                     print(tweet.text)
+                                                                    print(tweet.createdAt)
                                                                 }
                                                             }, failure: { (operation: URLSessionDataTask?, error: Error) in
                                                                 print(error)
@@ -80,19 +78,38 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     func homeTimelineWithParams(params: [String: AnyObject]?, completion: @escaping (_ tweets: [Tweet]?, _ error: Error?) -> ()) {
-        print("calling hometimeline------------------------")
         get("1.1/statuses/home_timeline.json", parameters: nil, progress: nil, success: {
             (operation: URLSessionDataTask, response: Any?) in
             let tweets = Tweet.tweetsWithArray(array: response as! [[String: Any]])
-            print("\(tweets.count)")
-            for tweet in tweets {
-                print(tweet.text)
-            }
+//            for tweet in tweets {
+//                print(tweet.text)
+//            }
             completion(tweets, nil)
         }, failure: { (operation: URLSessionDataTask?, error: Error) in
             print(error)
             completion(nil, error)
         })
 
+    }
+    
+    func sendTweet(text: String, completion: @escaping(_ tweet: Tweet?, _ error: Error?) -> ()) {
+        post("1.1/statuses/update.json", parameters: ["status": text], progress: nil, success: {
+            (operation: URLSessionDataTask, response: Any?) in
+            let tweet = Tweet(dictionary: response as! [String: Any])
+            
+            completion(tweet, nil)
+        }, failure: { (operation: URLSessionDataTask?, error: Error) in
+            print(error)
+            completion(nil, error)
+            })
+    }
+    
+    func deleteTweet(id: UInt64) {
+        post("1.1/statuses/destroy.json", parameters: ["id": id], progress: nil, success: {
+            (operation: URLSessionDataTask, response: Any?) in
+            print("\(response)")
+        }, failure: { (operation: URLSessionDataTask?, error: Error) in
+            print(error)
+        })
     }
 }

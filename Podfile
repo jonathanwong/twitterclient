@@ -7,6 +7,8 @@ target 'cp_TwitterClient' do
 
 pod "AFNetworking"
 pod "BDBOAuth1Manager"
+pod 'ChameleonFramework/Swift', :git => 'https://github.com/ViccAlexander/Chameleon.git'
+pod 'SwiftMoment'
 
   # Pods for cp_TwitterClient
 
