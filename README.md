@@ -30,6 +30,7 @@ The following **additional** features are implemented:
 - [x] Small animation when user types on the character limit label
 - [x] Prevent users from typing more than the max 140 characters
 - [x] Enable/disable send tweet button based on if there's text to send or not
+- [x] Swipe to delete tweet
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
