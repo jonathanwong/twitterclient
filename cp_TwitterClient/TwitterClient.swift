@@ -112,4 +112,31 @@ class TwitterClient: BDBOAuth1SessionManager {
             print(error)
         })
     }
+    
+    func retweetTweet(id: UInt64) {
+        post("1.1/statuses/retweet.json", parameters: ["id": id], progress: nil, success: {
+            (operation: URLSessionDataTask, response: Any?) in
+            print("\(response)")
+        }, failure: { (operation: URLSessionDataTask?, error: Error) in
+            print(error)
+        })
+    }
+    
+    func favoriteTweet(id: UInt64) {
+        post("1.1/favorites/create.json", parameters: ["id": id], progress: nil, success: {
+            (operation: URLSessionDataTask, response: Any?) in
+            print("\(response)")
+        }, failure: { (operation: URLSessionDataTask?, error: Error) in
+            print(error)
+        })
+    }
+    
+    func unfavoriteTweet(id: UInt64) {
+        post("1.1/favorites/destroy.json", parameters: ["id": id], progress: nil, success: {
+            (operation: URLSessionDataTask, response: Any?) in
+            print("\(response)")
+        }, failure: { (operation: URLSessionDataTask?, error: Error) in
+            print(error)
+        })
+    }
 }

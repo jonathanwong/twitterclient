@@ -15,6 +15,10 @@ class TweetDetailViewController: UIViewController {
     @IBOutlet weak var screennameLabel: UILabel!
     @IBOutlet weak var tweetLabel: UILabel!
     
+    @IBOutlet weak var retweetButton: UIButton!
+    @IBOutlet weak var favoriteButton: UIButton!
+    @IBOutlet weak var replyButton: UIButton!
+    
     var tweet: Tweet!
     
     override func viewDidLoad() {
@@ -26,6 +30,16 @@ class TweetDetailViewController: UIViewController {
             screennameLabel.text = "@\(user.screenname!)"
             tweetLabel.text = tweet.text
         }
+        
+        let retweet = "🐤"
+        retweetButton.setTitle(retweet, for: .normal)
+        
+        let favorite = "♥️"
+        favoriteButton.setTitle(favorite, for: .normal)
+        
+        let reply = "📣"
+        replyButton.setTitle(reply, for: .normal)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,5 +57,16 @@ class TweetDetailViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    @IBAction func retweetPressed(_ sender: Any) {
+        TwitterClient.sharedInstance.retweetTweet(id: tweet.id)
+    }
 
+    
+    @IBAction func favoritePressed(_ sender: Any) {
+        TwitterClient.sharedInstance.favoriteTweet(id: tweet.id)
+    }
+    
+    
+    @IBAction func replyPressed(_ sender: Any) {
+    }
 }
