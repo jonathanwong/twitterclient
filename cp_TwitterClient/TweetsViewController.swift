@@ -102,17 +102,14 @@ extension TweetsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            
             if var tweets = tweets {
                 let tweet = tweets[indexPath.row]
                 TwitterClient.sharedInstance.deleteTweet(id: tweet.id)
                 tweets.remove(at: indexPath.row)
-                tableView.reloadRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
-                
-//                TwitterClient.sharedInstance.homeTimelineWithParams(params: nil, completion: {
-//                    (tweets, error) -> () in
-//                    self.tweets = tweets
-//                    self.tweetsTableView.reloadData()
-//                })
+                self.tweets = tweets
+                tableView.reloadData()
+//                tableView.reloadRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
             }
         }
     }
@@ -130,12 +127,9 @@ extension TweetsViewController: UITableViewDelegate {
 
 extension TweetsViewController: CreateTweetViewControllerDelegate {
     func createTweetViewControllerDelegateDidTweet(tweet: Tweet) {
-        if var tweets = tweets {
-            tweets.insert(tweet, at: 0)
-            DispatchQueue.main.async {
-                self.tweetsTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
-            }
-            
+        if tweets != nil {
+            self.tweets?.insert(tweet, at: 0)
+            tweetsTableView.reloadData()
         }
     }
 }
