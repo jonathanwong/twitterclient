@@ -14,6 +14,7 @@ class TweetsViewController: UIViewController {
     
     var tweets: [Tweet]?
     var selectedTweet: Tweet?
+    @IBOutlet weak var profileImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +55,11 @@ class TweetsViewController: UIViewController {
             if selectedTweet != nil {
                 destination.tweet = selectedTweet
             }
+        } else if segue.identifier == "showProfileViewController" {
+            if let screenname = sender as? String {
+                let destination = segue.destination as! ProfileViewController
+                destination.screenname = screenname
+            }
         }
     }
     
@@ -65,6 +71,8 @@ class TweetsViewController: UIViewController {
     @IBAction func addTweetPressed(_ sender: Any) {
         performSegue(withIdentifier: "createTweetSegue", sender: self)
     }
+    
+    
     
     func getTweets(_ sender: UIRefreshControl) {
         TwitterClient.sharedInstance.homeTimelineWithParams(params: nil, completion: {
@@ -86,6 +94,7 @@ extension TweetsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TweetTableViewCell", for: indexPath) as! TweetTableViewCell
+        cell.delegate = self
         
         if let tweets = tweets {
             cell.avatarImageView.image = nil
@@ -109,7 +118,6 @@ extension TweetsViewController: UITableViewDataSource {
                 tweets.remove(at: indexPath.row)
                 self.tweets = tweets
                 tableView.reloadData()
-//                tableView.reloadRows(at: [IndexPath(row: indexPath.row, section: 0)], with: .automatic)
             }
         }
     }
@@ -131,5 +139,16 @@ extension TweetsViewController: CreateTweetViewControllerDelegate {
             self.tweets?.insert(tweet, at: 0)
             tweetsTableView.reloadData()
         }
+    }
+}
+
+extension TweetsViewController: TweetTableViewCellDelegate {
+    func tweetTableViewCellDelegate(_ cell: TweetTableViewCell, didTapImage screenname: String) {
+        print(screenname)
+        TwitterClient.sharedInstance.users(screenname: screenname, completion: {
+            (user: User!, error: Error!) in
+            print(user)
+            self.performSegue(withIdentifier: "showProfileViewController", sender: screenname)
+        })
     }
 }

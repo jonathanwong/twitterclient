@@ -9,6 +9,10 @@
 import UIKit
 import SwiftMoment
 
+protocol TweetTableViewCellDelegate: class {
+    func tweetTableViewCellDelegate(_ cell: TweetTableViewCell, didTapImage screenname: String)
+}
+
 class TweetTableViewCell: UITableViewCell {
 
     @IBOutlet weak var avatarImageView: UIImageView!
@@ -16,12 +20,16 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var screennameLabel: UILabel!
     @IBOutlet weak var tweetLabel: UILabel!
     
+    weak var delegate: TweetTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         avatarImageView.layer.cornerRadius = 5.0
         avatarImageView.clipsToBounds = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(TweetTableViewCell.imageTapped(_:)))
+        avatarImageView.addGestureRecognizer(tapGesture)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -45,5 +53,9 @@ class TweetTableViewCell: UITableViewCell {
             }
             
         }
+    }
+    
+    func imageTapped(_ sender: UITapGestureRecognizer) {
+        delegate?.tweetTableViewCellDelegate(self, didTapImage: (tweet.user?.screenname!)!)
     }
 }

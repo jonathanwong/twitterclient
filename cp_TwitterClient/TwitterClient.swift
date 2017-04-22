@@ -89,7 +89,30 @@ class TwitterClient: BDBOAuth1SessionManager {
             print(error)
             completion(nil, error)
         })
-
+    }
+    
+    func users(userId: UInt64, completion: @escaping (_ userInfo: User?, _ error: Error?) -> ()) {
+        get("1.1/users/show.json", parameters: ["user_id": userId], progress: nil, success: {
+            (operation: URLSessionDataTask, response: Any?) in
+            let userInfo = User(dictionary: response as! [String: Any])
+            print("\(response)")
+            completion(userInfo, nil)
+        }, failure: { (operation: URLSessionDataTask?, error: Error) in
+            print(error)
+            completion(nil, error)
+        })
+    }
+    
+    func users(screenname: String, completion: @escaping (_ userInfo: User?, _ error: Error?) -> ()) {
+        get("1.1/users/show.json", parameters: ["screen_name": screenname], progress: nil, success: {
+            (operation: URLSessionDataTask, response: Any?) in
+            let userInfo = User(dictionary: response as! [String: Any])
+            print("\(response)")
+            completion(userInfo, nil)
+        }, failure: { (operation: URLSessionDataTask?, error: Error) in
+            print(error)
+            completion(nil, error)
+        })
     }
     
     func sendTweet(text: String, completion: @escaping(_ tweet: Tweet?, _ error: Error?) -> ()) {

@@ -15,22 +15,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var storyboard = UIStoryboard(name: "Main", bundle: nil)
+    var menuNavController: UINavigationController!
+    var homeNavController: UINavigationController!
+    var slideOutViewController: SlideOutViewController!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        NotificationCenter.default.addObserver(self, selector: "userDidLogout", name: NSNotification.Name(UserDidLogoutNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.userDidLogout), name: NSNotification.Name(UserDidLogoutNotification), object: nil)
         
         UINavigationBar.appearance().barTintColor = UIColor.flatMint
         UINavigationBar.appearance().tintColor = UIColor.flatSand
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.flatWhite]
         
-        if User.currentUser != nil {
-            // go to the logged in screen
-            let vc = storyboard.instantiateViewController(withIdentifier: "TweetsNavController")
-//            let vc = storyboard.instantiateViewController(withIdentifier: "TweetsViewController")
-            window?.rootViewController = vc
-            print(User.currentUser!)
-        }
+//        if User.currentUser != nil {
+//            // go to the logged in screen
+//            let vc = storyboard.instantiateViewController(withIdentifier: "TweetsNavController")
+////            let vc = storyboard.instantiateViewController(withIdentifier: "TweetsViewController")
+//            window?.rootViewController = vc
+//            print(User.currentUser!)
+//        }
+        
+        let menuVC = storyboard.instantiateViewController(withIdentifier: "MenuViewController") as! MenuViewController
+        menuNavController = UINavigationController(rootViewController: menuVC)
+        menuVC.delegate = self
+        
+        let homeVC = storyboard.instantiateViewController(withIdentifier: "TweetsViewController") as! TweetsViewController
+        homeNavController = UINavigationController(rootViewController: homeVC)
+        
+        slideOutViewController = SlideOutViewController(leftViewController: menuNavController, mainViewController: homeNavController, overlap: 50)
+        window?.rootViewController = slideOutViewController
         
         return true
     }
@@ -66,6 +79,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         TwitterClient.sharedInstance.openURL(url: url)
         
         return true
+    }
+    
+}
+
+extension AppDelegate: MenuViewControllerDelegate {
+    func menuViewController(_ controller: MenuViewController, didSelectRow row: Int) {
+        let dataSource = controller.menuSource
+//        public let menuSource = ["Profile", "Timeline", "Mentions", "Account"]
+        if "profile" == dataSource[row].lowercased() {
+            let vc = storyboard.instantiateViewController(withIdentifier: "ProfileViewController")
+            homeNavController.setViewControllers([vc], animated: true)
+            slideOutViewController.closeSideBarAnimated(animated: true)
+        } else if "timeline" == dataSource[row].lowercased() {
+            let vc = storyboard.instantiateViewController(withIdentifier: "TweetsViewController")
+            homeNavController.setViewControllers([vc], animated: true)
+            slideOutViewController.closeSideBarAnimated(animated: true)
+        } else if "mentions" == dataSource[row].lowercased() {
+            let vc = storyboard.instantiateViewController(withIdentifier: "MentionsViewController")
+            homeNavController.setViewControllers([vc], animated: true)
+            slideOutViewController.closeSideBarAnimated(animated: true)
+        } else if "account" == dataSource[row].lowercased() {
+            let vc = storyboard.instantiateViewController(withIdentifier: "AccountViewController")
+            homeNavController.setViewControllers([vc], animated: true)
+            slideOutViewController.closeSideBarAnimated(animated: true)
+        }
+        
     }
 }
 
