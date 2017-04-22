@@ -52,8 +52,8 @@ class ProfileViewController: UIViewController {
             })
         }
         
-        
-        
+        profileImageView.layer.cornerRadius = 5.0
+        profileImageView.clipsToBounds = true
     }
 
     override func didReceiveMemoryWarning() {

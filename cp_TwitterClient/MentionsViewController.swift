@@ -14,6 +14,7 @@ class MentionsViewController: UIViewController {
         super.viewDidLoad()
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sign Out", style: .plain, target: self, action: #selector(MentionsViewController.logoutPressed(_:)))
+        self.navigationItem.title = "Mentions"
     }
     
 

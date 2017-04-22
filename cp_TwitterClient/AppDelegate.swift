@@ -88,7 +88,8 @@ extension AppDelegate: MenuViewControllerDelegate {
         let dataSource = controller.menuSource
 //        public let menuSource = ["Profile", "Timeline", "Mentions", "Account"]
         if "profile" == dataSource[row].lowercased() {
-            let vc = storyboard.instantiateViewController(withIdentifier: "ProfileViewController")
+            let vc = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
+            vc.user = User.currentUser
             homeNavController.setViewControllers([vc], animated: true)
             slideOutViewController.closeSideBarAnimated(animated: true)
         } else if "timeline" == dataSource[row].lowercased() {

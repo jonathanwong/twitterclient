@@ -358,10 +358,10 @@
             </objects>
             <point key="canvasLocation" x="2340" y="35.532233883058474"/>
         </scene>
-        <!--Menu View Controller-->
+        <!--Menu-->
         <scene sceneID="ZHa-YX-nsy">
             <objects>
-                <viewController storyboardIdentifier="MenuViewController" id="NVw-py-Vkw" customClass="MenuViewController" customModule="cp_TwitterClient" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MenuViewController" title="Menu" id="NVw-py-Vkw" customClass="MenuViewController" customModule="cp_TwitterClient" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sHj-gg-wgC"/>
                         <viewControllerLayoutGuide type="bottom" id="9xT-DZ-PrS"/>
@@ -553,7 +553,7 @@
                     <view key="view" contentMode="scaleToFill" id="V6o-aq-7oy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.41777596659999999" green="1" blue="0.32483389460000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.92120724919999997" green="0.84832113980000001" blue="0.62377804520000002" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="n9y-DF-sNx"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
